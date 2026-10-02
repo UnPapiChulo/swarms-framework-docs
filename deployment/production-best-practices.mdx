@@ -490,18 +490,26 @@ agent = Agent(
 
 ### Manual State Management
 
-```python
-# Save state
-agent.save()
+Save and load the same absolute path. Relative save paths are placed under the
+agent-specific workspace, so a new agent may use a different directory.
+`load_state_path` only configures the default for `load()`; constructing an agent
+does not restore its state. Call `load()` explicitly.
 
-# Load state
+```python
+from pathlib import Path
 from swarms import Agent
 
+state_path = str(Path("./agent_states/stateful_agent.json").resolve())
+
+# Save the existing agent's state
+agent.save(state_path)
+
+# Restore from that same file
 agent = Agent(
     agent_name="Restored-Agent",
     model_name="claude-sonnet-4-6",
-    load_state_path="./agent_states/agent_state.json",
 )
+agent.load(state_path)
 ```
 
 ## Testing
